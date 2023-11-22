@@ -27,6 +27,8 @@ class Product(models.Model):
     descriptions= models.TextField()
     slug=models.SlugField(blank=True, null=True)
     image=models.ImageField(upload_to='products')
+    quantity=models.PositiveBigIntegerField(default=1)
+    stock=models.BooleanField(default=True)
     created=models.DateTimeField(auto_now_add=True)
     updated=models.DateTimeField(auto_now=True)
 
@@ -42,17 +44,23 @@ class Product(models.Model):
         self.slug= slugify(self.name)
         return super(Product, self).save(*args, **kwargs)
     
+    
     @property
     def avg_rating(self):
-        ratings=self.product.all()
-        avg=0.0
-        sum=0.0
+        ratings = self.product.all()
+        if ratings:
+            avg = 0.0
+            sum = 0.0
+            for data in ratings:
+                sum += data.rating
+            avg = sum / len(ratings)
+            return avg
+        return 0
 
-        for data in ratings:
-            sum += data.rating
-        avg = sum / len(ratings)
-        return avg
-    
+    @property
+    def category_name(self):
+        return self.category.name
+
     #ratings
 
 class Rating(models.Model):
@@ -71,7 +79,8 @@ class Rating(models.Model):
 
     def save(self, *args, **kwargs):
         if self.rating not in range(1,6):
-            raise ValidationError('Rating should be in range 1 to 5 inclusive.')
+            raise ValidationError(
+                'Rating should be in range 1 to 5 inclusive.')
         
         return super().save(*args, **kwargs)
     
