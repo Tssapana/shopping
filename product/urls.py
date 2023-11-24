@@ -8,6 +8,7 @@ router.register(r'category', CategoryModelViewSet, basename='category')
 router.register(r'product', ProductModelViewSet, basename='product')
 router.register(r'rating', RatingModelViewSet, basename='rating')
 
+app_name='product'
 
 urlpatterns =[
     path ('', include(router.urls))

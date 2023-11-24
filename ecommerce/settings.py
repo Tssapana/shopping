@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     'product',
     'rest_framework',
     'django_filters',
+    'cart',
+    'account',
+    'rest_framework.authtoken'
 ]
 
 MIDDLEWARE = [
