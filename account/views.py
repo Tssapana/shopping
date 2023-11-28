@@ -1,8 +1,8 @@
 from rest_framework.views import APIView
-from .serializers import UserLoginSerializer
+from .serializers import UserLoginSerializer, SignupSerializer
 from django.contrib.auth.models import User
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status,viewsets
 from django.contrib.auth import authenticate, logout
 from rest_framework.authtoken.models import Token
 
@@ -33,3 +33,11 @@ class UserLogoutAPIView(APIView):
     def post(request):
         logout(request)
         return Response({'message': 'User Logout Successfully'}, status= status.HTTP_200_OK)
+    
+class UserSignupModelViewset(viewsets.ModelViewSet):
+    serializer_class= SignupSerializer
+    queryset= User.objects.all()
+     
+    
+
+
